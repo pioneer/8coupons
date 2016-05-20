@@ -1,0 +1,5 @@
+aiohttp==0.21.6
+motor==0.6.2
+PyYAML==3.11
+pyflakes==1.2.3
+pep8==1.7.0
