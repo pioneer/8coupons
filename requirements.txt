@@ -1,5 +1,4 @@
 aiohttp==0.21.6
-pymongo==3.2.2
 motor==0.6.2
 pyflakes==1.2.3
 pep8==1.7.0

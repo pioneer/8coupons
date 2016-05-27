@@ -47,7 +47,7 @@ class GiantBombScraper:
             logging.info("Fetched %s", data_page)
             # TODO: bulk update
             for game in results:
-                db.games.update_one({"id": game["id"]}, {"$set": game}, upsert=True)
+                db.games.update({"id": game["id"]}, {"$set": game}, upsert=True)
         logging.info("Total games in database: %s", db.games.count())
 
 
