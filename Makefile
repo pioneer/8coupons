@@ -6,6 +6,8 @@ FLAGS=
 runserver:
 	python -m eight_coupons
 
+runscraper:
+	python -m eight_coupons.scraper
 
 flake:
 	pyflakes eight_coupons

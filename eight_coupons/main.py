@@ -5,8 +5,9 @@ import pathlib
 from aiohttp import web
 from motor.motor_asyncio import AsyncIOMotorClient
 from eight_coupons.routes import setup_routes
-from eight_coupons.utils import load_config
+from eight_coupons import settings
 from eight_coupons.views import SiteHandler
+from eight_coupons.scraper import GiantBombScraper
 
 
 PROJ_ROOT = pathlib.Path(__file__).parent.parent
@@ -16,17 +17,14 @@ async def init(loop):
     # setup application and extensions
     app = web.Application(loop=loop)
 
-    # load config from yaml file
-    conf = load_config(str(PROJ_ROOT / 'config' / 'config.yaml'))
-
     # create connection to the database\\
-    db = AsyncIOMotorClient()[conf['mongo']['db']]
+    db = AsyncIOMotorClient(settings.MONGO['host'], settings.MONGO['port'])[settings.MONGO['db']]
 
     # setup views and routes
     handler = SiteHandler(db)
     setup_routes(app, handler, PROJ_ROOT)
 
-    host, port = conf['host'], conf['port']
+    host, port = settings.HOST, settings.PORT
     return app, host, port
 
 

@@ -21,5 +21,7 @@ API endpoint::
 
 Requirements
 ============
-* aiohttp_
-* motor_
+* aiohttp
+* motor
+* requests
+* pymongo 3.x
