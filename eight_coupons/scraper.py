@@ -16,12 +16,15 @@ class GiantBombScraper:
 
     def __init__(self):
         if not self.PLATFORM_IDS:
-            response = requests.get(settings.SCRAPER['platform_url_template'].\
-                                        format(api_key=settings.SCRAPER['api_key']),
-                                    headers={'User-Agent': settings.SCRAPER['user_agent']})
+            response = requests.\
+                get(settings.SCRAPER['platform_url_template'].
+                    format(api_key=settings.SCRAPER['api_key']),
+                    headers={'User-Agent': settings.SCRAPER['user_agent']})
             self.PLATFORM_IDS = [x['id'] for x in response.json()['results']
-                                 if x['abbreviation'] in settings.SCRAPER['platforms']]
-            logging.debug("Fetched platform IDs %s for %s", self.PLATFORM_IDS, settings.SCRAPER['platforms'])
+                                 if x['abbreviation']
+                                 in settings.SCRAPER['platforms']]
+            logging.debug("Fetched platform IDs %s for %s",
+                          self.PLATFORM_IDS, settings.SCRAPER['platforms'])
 
     def data(self):
         offset = 0
@@ -34,7 +37,8 @@ class GiantBombScraper:
                         offset=offset,
                         platforms=platforms)
             response = requests.get(url,
-                                    headers={'User-Agent': settings.SCRAPER['user_agent']})
+                                    headers={'User-Agent':
+                                             settings.SCRAPER['user_agent']})
             results = response.json()
             if len(results['results']) == 0:
                 break
@@ -47,7 +51,8 @@ class GiantBombScraper:
             logging.info("Fetched %s", data_page)
             # TODO: bulk update
             for game in results:
-                db.games.update({"id": game["id"]}, {"$set": game}, upsert=True)
+                db.games.update({"id": game["id"]},
+                                {"$set": game}, upsert=True)
                 self.store_search_data(game)
         logging.info("Total games in database: %s", db.games.count())
 
@@ -64,7 +69,9 @@ class GiantBombScraper:
             if not game[field]:
                 continue
             for stem in split_stems(game[field]):
-                logging.debug("Found word '%s' in field '%s' of game #%s", stem, field, game['id'])
+                logging.debug("Found word '%s' in field '%s' of game #%s",
+                              stem,
+                              field, game['id'])
                 self.store_stem(stem, game['id'])
 
 if __name__ == "__main__":
