@@ -1,9 +1,19 @@
-import yaml
+import re
+import snowballstemmer
+from bs4 import BeautifulSoup
 
 
-def load_config(fname):
-    with open(fname, 'rt') as f:
-        data = yaml.load(f)
-    # TODO: add config validation
-    return data
+splitter = re.compile(r"[\s\.-]")
 
+
+stemmer = snowballstemmer.stemmer("english")
+
+
+def split_stems(s):
+    # TODO: Check for incorrect HTML
+    content = ''.join(BeautifulSoup(s).findAll(text=True))
+    for word in splitter.split(content):
+        if not word:
+            continue
+        word = word.lower()
+        yield stemmer.stemWord(word)

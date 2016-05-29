@@ -1,17 +1,13 @@
 import logging
 import time
-import re
 import requests
 import pymongo
-import snowballstemmer
-from bs4 import BeautifulSoup
 from eight_coupons import settings
+from eight_coupons.utils import split_stems
 
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(message)s')
-
-splitter = re.compile(r"[\s\.-]")
 
 
 class GiantBombScraper:
@@ -65,17 +61,10 @@ class GiantBombScraper:
         logging.debug("Added stem '%s' to %s", stem, index_item)
 
     def store_search_data(self, game):
-        stemmer = snowballstemmer.stemmer("english")
         for field in settings.SCRAPER['fields_to_index']:
             if not game[field]:
                 continue
-            # TODO: Check for incorrect HTML
-            content = ''.join(BeautifulSoup(game[field]).findAll(text=True))
-            for word in splitter.split(content):
-                if not word:
-                    continue
-                word = word.lower()
-                stem = stemmer.stemWord(word)
+            for stem in split_stems(game[field]):
                 logging.debug("Found word '%s' in field '%s' of game #%s", stem, field, game['id'])
                 self.store_stem(stem, game['id'])
 

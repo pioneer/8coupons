@@ -1,6 +1,6 @@
 import json
 from aiohttp import web
-import snowballstemmer
+from eight_coupons.utils import split_stems
 
 
 class SiteHandler:
@@ -12,13 +12,8 @@ class SiteHandler:
         search_params = {}
         search_str = request.GET.get('search')
         if search_str:
-            stemmer = snowballstemmer.stemmer("english")
-            # TODO: Add the same regex splitting and possibly HTML stripping
-            words = search_str.split()
             game_ids = set()
-            for word in words:
-                word = word.lower()
-                stem = stemmer.stemWord(word)
+            for stem in split_stems(search_str):
                 index_item = await self.db.search_index.find_one({"stem": stem})
                 if index_item:
                     game_ids = game_ids.union(index_item["game_ids"])
