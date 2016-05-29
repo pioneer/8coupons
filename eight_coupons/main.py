@@ -24,7 +24,8 @@ async def init(loop):
 
 def main():
     # init logging
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG,
+                        format='%(asctime)s - %(levelname)s - %(message)s')
 
     loop = asyncio.get_event_loop()
     app, host, port = loop.run_until_complete(init(loop))

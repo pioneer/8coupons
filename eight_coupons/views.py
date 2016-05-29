@@ -1,12 +1,7 @@
 import json
-import logging
 from aiohttp import web
 from eight_coupons.utils import split_stems
 from eight_coupons.db.async import db
-
-
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class SiteHandler:
