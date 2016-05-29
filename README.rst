@@ -12,10 +12,13 @@ Run application::
 
     $ make runserver
 
+Run scraper::
+
+    $ make runscraper
 
 API endpoint::
 
-    http://localhost:8080/games
+    http://localhost:8080/games?search=<search string>
 
 
 
@@ -24,4 +27,5 @@ Requirements
 * aiohttp
 * motor
 * requests
-* pymongo 3.x
+* snowballstemmer
+* BeautifulSoup
