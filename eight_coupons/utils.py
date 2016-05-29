@@ -11,7 +11,7 @@ stemmer = snowballstemmer.stemmer("english")
 
 def split_stems(s):
     # TODO: Check for incorrect HTML
-    content = ''.join(BeautifulSoup(s).findAll(text=True))
+    content = ''.join(BeautifulSoup(s, "html.parser").findAll(text=True))
     for word in splitter.split(content):
         if not word:
             continue

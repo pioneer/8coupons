@@ -1,9 +1,9 @@
 import logging
 import time
 import requests
-import pymongo
 from eight_coupons import settings
 from eight_coupons.utils import split_stems
+from eight_coupons.db.sync import db
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -22,7 +22,6 @@ class GiantBombScraper:
             self.PLATFORM_IDS = [x['id'] for x in response.json()['results']
                                  if x['abbreviation'] in settings.SCRAPER['platforms']]
             logging.debug("Fetched platform IDs %s for %s", self.PLATFORM_IDS, settings.SCRAPER['platforms'])
-        self.db = pymongo.MongoClient(settings.MONGO['host'], settings.MONGO['port'])[settings.MONGO['db']]
 
     def data(self):
         offset = 0
@@ -48,15 +47,15 @@ class GiantBombScraper:
             logging.info("Fetched %s", data_page)
             # TODO: bulk update
             for game in results:
-                self.db.games.update({"id": game["id"]}, {"$set": game}, upsert=True)
+                db.games.update({"id": game["id"]}, {"$set": game}, upsert=True)
                 self.store_search_data(game)
-        logging.info("Total games in database: %s", self.db.games.count())
+        logging.info("Total games in database: %s", db.games.count())
 
     def store_stem(self, stem, id):
-        self.db.search_index.update({"stem": stem},
-                                   {"$addToSet": {"game_ids": id}},
-                                   upsert=True)
-        index_item = self.db.search_index.find_one({"stem": stem})
+        db.search_index.update({"stem": stem},
+                               {"$addToSet": {"game_ids": id}},
+                               upsert=True)
+        index_item = db.search_index.find_one({"stem": stem})
         index_item.pop("_id")
         logging.debug("Added stem '%s' to %s", stem, index_item)
 
