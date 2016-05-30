@@ -24,7 +24,8 @@ API endpoint::
 
 Requirements
 ============
-Python 3.5+, MongoDB and the libraries below:
+Python 3.5+, MongoDB and the libraries below (see ``requirements.txt`` for
+more details):
 
 * aiohttp
 * motor
@@ -153,9 +154,9 @@ Scaling approach
 * nginx as a load balancer
 * several machines with identical HTTP API server and MongoDB contents
 * one of the machines above will serve as a master node, the only node running
-  a scraper, along with propagating changes across all Mongo databases
-* changes propagating, depending on limitations we have, may be implemented
-  using whether MongoDB built-in replication features (master-slave,
+  a scraper, along with propagating the changes across all Mongo databases
+* propagating of the changes, depending on limitations we have, may be
+  implemented using whether MongoDB built-in replication features (master-slave,
   replicasets), or manually using Apache Kafka or RabbitMQ (we need to improve
   the scraper in this case in order to send messages and also implement another
   background process on slave nodes to listen to changes coming from the master)
@@ -164,13 +165,13 @@ Scaling approach
 TODO
 ====
 * tests
-* scaling (see Scaling approach)
+* scaling (see **Scaling approach**)
 * caching the index and some frequently used games data
 * spelling errors processing via Levenstein algorithm
 * working correctly with non-English texts
 * remove words like "the", "of", "with", "in" from using in index
-* more flexible scraping in order to allow extending with more sources
+* more flexible scraping in order to allow extending with another sources
 * multithreaded scraping and totally switching to async db access
 * limit and offset parameters for splitting the results
-* MongoDB index for "id" field
+* MongoDB indexes
 * bonus points
