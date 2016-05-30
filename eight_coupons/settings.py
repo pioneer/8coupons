@@ -23,7 +23,7 @@ SCRAPER = {
         "Chrome/50.0.2661.94 Safari/537.36",
     "platforms": ['NES', 'SNES', 'N64'],
     "step": 100,
-    "run_every": 3600,  # Fetch time period in seconds
+    "run_every": 600,  # Fetch time period in seconds
     "fields_to_index": ["name", "description", "deck"]
 }
 

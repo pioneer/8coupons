@@ -127,8 +127,7 @@ both games in output::
          "description": "The reincarnation of well-known Arkanoid game.",
          "image": "http://static.giantbomb.com/images/1.jpg",
          "date_added": "2016-05-30 15:16:51",
-         "tags": "arcade,arkanoid,breakout,old,platformer,new"}
-
+         "tags": "arcade,arkanoid,breakout,old,platformer,new"},
         {"id": 2,
          "name": "Pacman 3D",
          "description": "Our old friend Pacman appears in 3D with brand new graphics, monsters and labyrinths.",
@@ -140,14 +139,38 @@ The search against, for example, "monster" will return just the second game,
 and the search against "horizon" will return only the first one.
 
 
+Notes
+=====
+There are both asynchronous and synchronous database usages. Asynchronous is
+faster and used in HTTP API server, synchronous is used in scraper, due to
+currently there is just a single thread scraping games data, and adding async
+stuff along with event loop would add unneeded complexity. This can be changed
+when a multithreaded scraping approach will be implemented.
+
+
+Scaling approach
+================
+* nginx as a load balancer
+* several machines with identical HTTP API server and MongoDB contents
+* one of the machines above will serve as a master node, the only node running
+  a scraper, along with propagating changes across all Mongo databases
+* changes propagating, depending on limitations we have, may be implemented
+  using whether MongoDB built-in replication features (master-slave,
+  replicasets), or manually using Apache Kafka or RabbitMQ (we need to improve
+  the scraper in this case in order to send messages and also implement another
+  background process on slave nodes to listen to changes coming from the master)
+
+
 TODO
 ====
 * tests
-* scaling
-* spelling errors processing via Levenstein algorythm
-* remove words like "the", "of" from using in index
+* scaling (see Scaling approach)
+* caching the index and some frequently used games data
+* spelling errors processing via Levenstein algorithm
+* working correctly with non-English texts
+* remove words like "the", "of", "with", "in" from using in index
 * more flexible scraping in order to allow extending with more sources
-* multi-threaded scraping and totally switching to async db access
+* multithreaded scraping and totally switching to async db access
 * limit and offset parameters for splitting the results
 * MongoDB index for "id" field
 * bonus points
