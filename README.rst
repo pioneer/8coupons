@@ -60,7 +60,7 @@ linked to each stem and returning those games.
 
 Example: we have configured in `settings.py` that the fields of interest are
 "name" and "description". Then, two new games come:
-
+```
     {"id": 1,
      "name": "Arkanoid: New Horizons",
      "description": "The reincarnation of well-known Arkanoid game.",
@@ -74,7 +74,7 @@ Example: we have configured in `settings.py` that the fields of interest are
      "image": "http://static.giantbomb.com/images/2.jpg",
      "date_added": "2016-05-30 15:25:13",
      "tags": "arcade,pacman,3d,old,platformer,new"}
-
+```
 The indexer parses "name" and "description" of both games, omitting all
 other fields. So, the words like "platformer" and "arcade" from tags will not
 come into the index.
@@ -89,59 +89,38 @@ Second game produces "pacman", "3d" and "our", "old", "friend", "pacman",
 
 After updating the index, assuming it was initially empty, the index will look
 like below:
-
+```
     {"stem": "arkanoid", "game_ids": [1]}
-
     {"stem": "new", "game_ids": [1, 2]}
-
     {"stem": "horizon", "game_ids": [1]}
-
     {"stem": "the", "game_ids": [1]}
-
     {"stem": "reincarn", "game_ids": [1]}
-
     {"stem": "of", "game_ids": [1]}
-
     {"stem": "well", "game_ids": [1]}
-
     {"stem": "known", "game_ids": [1]}
-
     {"stem": "game", "game_ids": [1]}
-
     {"stem": "pacman", "game_ids": [2]}
-
     {"stem": "3d", "game_ids": [2]}
-
     {"stem": "our", "game_ids": [2]}
-
     {"stem": "old", "game_ids": [2]}
-
     {"stem": "friend", "game_ids": [2]}
-
     {"stem": "appear", "game_ids": [2]}
-
     {"stem": "in", "game_ids": [2]}
-
     {"stem": "with", "game_ids": [2]}
-
     {"stem": "brand", "game_ids": [2]}
-
     {"stem": "graphics", "game_ids": [2]}
-
     {"stem": "monster", "game_ids": [2]}
-
     {"stem": "and", "game_ids": [2]}
-
     {"stem": "labyrinth", "game_ids": [2]}
-
-Then, if a search appears by using search string "new game",
+```
+Then, if a search appears by using search string "new game"::
 
     http://localhost:8080/games?search=new+game
 
 the HTTP API server will look for "new" and "game" stems in the index,
 which contains [1, 2] for "new" and [1] for "game", so thus resulting in
 both games in output:
-
+```
     {"games":
         {"id": 1,
          "name": "Arkanoid: New Horizons",
@@ -156,7 +135,7 @@ both games in output:
          "image": "http://static.giantbomb.com/images/2.jpg",
          "date_added": "2016-05-30 15:25:13",
          "tags": "arcade,pacman,3d,old,platformer,new"}}
-
+```
 The search against, for example, "monster" will return just the second game,
 and the search against "horizon" will return only the first one.
 
