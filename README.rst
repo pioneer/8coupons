@@ -42,7 +42,7 @@ Main components
 
 Configuring
 ===========
-Most of the values worth to configure are extracted into `settings.py`. Feel
+Most of the values worth to configure are extracted into ``settings.py``. Feel
 free to set them up according to your project environment.
 
 
@@ -54,13 +54,13 @@ along with updating the search index for each newly appeared game.
 
 The index is built using Snowball stemmer, by extracting stems from each
 field which is configured in settings to be under indexing. The index is a set
-of records like `{<stem>: [a list of game ids containing this stem]}`.
+of records like ``{<stem>: [a list of game ids containing this stem]}``.
 Searching against the index is searching for given stems, extracting game ids
 linked to each stem and returning those games.
 
-Example: we have configured in `settings.py` that the fields of interest are
-"name" and "description". Then, two new games come:
-```
+Example: we have configured in ``settings.py`` that the fields of interest are
+"name" and "description". Then, two new games come::
+
     {"id": 1,
      "name": "Arkanoid: New Horizons",
      "description": "The reincarnation of well-known Arkanoid game.",
@@ -74,7 +74,7 @@ Example: we have configured in `settings.py` that the fields of interest are
      "image": "http://static.giantbomb.com/images/2.jpg",
      "date_added": "2016-05-30 15:25:13",
      "tags": "arcade,pacman,3d,old,platformer,new"}
-```
+
 The indexer parses "name" and "description" of both games, omitting all
 other fields. So, the words like "platformer" and "arcade" from tags will not
 come into the index.
@@ -88,8 +88,8 @@ Second game produces "pacman", "3d" and "our", "old", "friend", "pacman",
 "labyrinth" respectively. Notice the "new" stem appears in both games.
 
 After updating the index, assuming it was initially empty, the index will look
-like below:
-```
+like below::
+
     {"stem": "arkanoid", "game_ids": [1]}
     {"stem": "new", "game_ids": [1, 2]}
     {"stem": "horizon", "game_ids": [1]}
@@ -112,15 +112,15 @@ like below:
     {"stem": "monster", "game_ids": [2]}
     {"stem": "and", "game_ids": [2]}
     {"stem": "labyrinth", "game_ids": [2]}
-```
+
 Then, if a search appears by using search string "new game"::
 
     http://localhost:8080/games?search=new+game
 
 the HTTP API server will look for "new" and "game" stems in the index,
 which contains [1, 2] for "new" and [1] for "game", so thus resulting in
-both games in output:
-```
+both games in output::
+
     {"games":
         {"id": 1,
          "name": "Arkanoid: New Horizons",
@@ -135,7 +135,7 @@ both games in output:
          "image": "http://static.giantbomb.com/images/2.jpg",
          "date_added": "2016-05-30 15:25:13",
          "tags": "arcade,pacman,3d,old,platformer,new"}}
-```
+
 The search against, for example, "monster" will return just the second game,
 and the search against "horizon" will return only the first one.
 
