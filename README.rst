@@ -3,7 +3,7 @@
 
 How to use
 ==========
-Install MongoDB::
+Install MongoDB.
 
 Install requirements::
 
@@ -25,6 +25,7 @@ API endpoint::
 Requirements
 ============
 Python 3.5+, MongoDB and the libraries below:
+
 * aiohttp
 * motor
 * requests
@@ -69,8 +70,7 @@ Example: we have configured in `settings.py` that the fields of interest are
 
     {"id": 2,
      "name": "Pacman 3D",
-     "description": "Our old friend Pacman appears in 3D with brand " +
-                    "new graphics, monsters and labyrinths.",
+     "description": "Our old friend Pacman appears in 3D with brand new graphics, monsters and labyrinths.",
      "image": "http://static.giantbomb.com/images/2.jpg",
      "date_added": "2016-05-30 15:25:13",
      "tags": "arcade,pacman,3d,old,platformer,new"}
@@ -91,26 +91,47 @@ After updating the index, assuming it was initially empty, the index will look
 like below:
 
     {"stem": "arkanoid", "game_ids": [1]}
+
     {"stem": "new", "game_ids": [1, 2]}
+
     {"stem": "horizon", "game_ids": [1]}
+
     {"stem": "the", "game_ids": [1]}
+
     {"stem": "reincarn", "game_ids": [1]}
+
     {"stem": "of", "game_ids": [1]}
+
     {"stem": "well", "game_ids": [1]}
+
     {"stem": "known", "game_ids": [1]}
+
     {"stem": "game", "game_ids": [1]}
+
     {"stem": "pacman", "game_ids": [2]}
+
     {"stem": "3d", "game_ids": [2]}
+
     {"stem": "our", "game_ids": [2]}
+
     {"stem": "old", "game_ids": [2]}
+
     {"stem": "friend", "game_ids": [2]}
+
     {"stem": "appear", "game_ids": [2]}
+
     {"stem": "in", "game_ids": [2]}
+
     {"stem": "with", "game_ids": [2]}
+
     {"stem": "brand", "game_ids": [2]}
+
     {"stem": "graphics", "game_ids": [2]}
+
     {"stem": "monster", "game_ids": [2]}
+
     {"stem": "and", "game_ids": [2]}
+
     {"stem": "labyrinth", "game_ids": [2]}
 
 Then, if a search appears by using search string "new game",
@@ -131,8 +152,7 @@ both games in output:
 
         {"id": 2,
          "name": "Pacman 3D",
-         "description": "Our old friend Pacman appears in 3D with brand " +
-                        "new graphics, monsters and labyrinths.",
+         "description": "Our old friend Pacman appears in 3D with brand new graphics, monsters and labyrinths.",
          "image": "http://static.giantbomb.com/images/2.jpg",
          "date_added": "2016-05-30 15:25:13",
          "tags": "arcade,pacman,3d,old,platformer,new"}}
