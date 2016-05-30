@@ -1,3 +1,8 @@
+"""
+.. module:: db/sync.py
+
+Synchronous MongoDB interface
+"""
 import pymongo
 from eight_coupons import settings
 

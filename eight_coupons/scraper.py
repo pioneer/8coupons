@@ -1,3 +1,8 @@
+"""
+.. module:: scraper.py
+
+Scraping and indexing GiantBomb data
+"""
 import logging
 import time
 import requests
@@ -7,7 +12,7 @@ from eight_coupons.db.sync import db
 
 
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
+                    format=settings.LOGGING_FORMAT)
 
 
 class GiantBombScraper:
@@ -15,6 +20,7 @@ class GiantBombScraper:
     PLATFORM_IDS = []
 
     def __init__(self):
+        # Get platform ids for given platform names taken from the config
         if not self.PLATFORM_IDS:
             response = requests.\
                 get(settings.SCRAPER['platform_url_template'].
@@ -27,6 +33,13 @@ class GiantBombScraper:
                           self.PLATFORM_IDS, settings.SCRAPER['platforms'])
 
     def data(self):
+        """
+        An iterator which fetches games from GiantBomb API, page by page,
+        using an offset value from settings, and yields those pages as
+        a sequence.
+
+        TODO: Parallel fetching
+        """
         offset = 0
         platforms = ",".join([str(platform_id)
                               for platform_id in self.PLATFORM_IDS])
@@ -46,6 +59,10 @@ class GiantBombScraper:
             offset += settings.SCRAPER['step']
 
     def run(self):
+        """
+        Main process: fetch data, insert/update the database, add search index
+        against fetched data.
+        """
         for data_page in self.data():
             results = data_page.pop('results')
             logging.info("Fetched %s", data_page)
@@ -56,15 +73,33 @@ class GiantBombScraper:
                 self.store_search_data(game)
         logging.info("Total games in database: %s", db.games.count())
 
-    def store_stem(self, stem, id):
+    def store_stem(self, stem, ids):
+        """
+        Updates or inserts the part of index related to the given stem.
+
+        :param: stem
+          A stem (normalized word form) to update the data for.
+
+        :param: ids
+          Ids of games which are known to contain the given stem.
+        """
+        # Update the list of game ids related to given stem with given ids
         db.search_index.update({"stem": stem},
-                               {"$addToSet": {"game_ids": id}},
+                               {"$addToSet": {"game_ids": ids}},
                                upsert=True)
+        # Fetch updated search index item to show in logging
         index_item = db.search_index.find_one({"stem": stem})
-        index_item.pop("_id")
+        index_item.pop("_id")  # Remove _id for better displaying in log
         logging.debug("Added stem '%s' to %s", stem, index_item)
 
     def store_search_data(self, game):
+        """
+        Get stems from each configured field of given game and store
+        the index for each stem.
+
+        :param: game
+          Game JSON object fetched from API.
+        """
         for field in settings.SCRAPER['fields_to_index']:
             if not game[field]:
                 continue
@@ -76,6 +111,7 @@ class GiantBombScraper:
 
 if __name__ == "__main__":
     scraper = GiantBombScraper()
+    # Run scraping forever periodically, using a delay from settings
     while True:
         scraper.run()
         logging.info("Sleeping for %s seconds", settings.SCRAPER['run_every'])

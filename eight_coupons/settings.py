@@ -7,6 +7,7 @@ MONGO = {
   "db": "eight_coupons"
 }
 
+# TODO: Multiple scrapers setup
 SCRAPER = {
     "url_template":
         "http://www.giantbomb.com/api/platforms/" +
@@ -25,3 +26,5 @@ SCRAPER = {
     "run_every": 3600,  # Fetch time period in seconds
     "fields_to_index": ["name", "description", "deck"]
 }
+
+LOGGING_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"

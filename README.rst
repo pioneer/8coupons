@@ -1,25 +1,24 @@
 8 coupons demo
 ==============
 
-Installation
-============
+How to use
+==========
 
-Install the app::
+Install requirements::
 
     $ pip install -r requirements.txt
 
-Run application::
+Run HTTP API server::
 
     $ make runserver
 
-Run scraper::
+Run scraper in a separate console::
 
     $ make runscraper
 
 API endpoint::
 
     http://localhost:8080/games?search=<search string>
-
 
 
 Requirements
@@ -29,3 +28,15 @@ Requirements
 * requests
 * snowballstemmer
 * BeautifulSoup
+
+
+TODO
+====
+* tests
+* scaling
+* spelling errors processing via Levenstein algorythm
+* more flexible scraping in order to allow extending with more sources
+* multi-threaded scraping and totally switching to async db access
+* limit and offset parameters for splitting the results
+* MongoDB index for "id" field
+* bonus points

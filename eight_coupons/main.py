@@ -1,3 +1,8 @@
+"""
+.. module:: main.py
+
+Initialization for HTTP API server
+"""
 import asyncio
 import logging
 import pathlib
@@ -5,28 +10,37 @@ import pathlib
 from aiohttp import web
 from eight_coupons.routes import setup_routes
 from eight_coupons import settings
-from eight_coupons.views import SiteHandler
+from eight_coupons.views import EightCouponsHandler
 
 
 PROJ_ROOT = pathlib.Path(__file__).parent.parent
 
 
 async def init(loop):
-    # setup application and extensions
+    """
+    Sets up aiohttp-based web application, views and routes
+
+    :param: loop
+      Asyncio's event loop to pass into aiohttp web application
+    """
+    # Setup application and extensions
     app = web.Application(loop=loop)
 
-    # setup views and routes
-    setup_routes(app, SiteHandler(), PROJ_ROOT)
+    # Setup views and routes
+    setup_routes(app, EightCouponsHandler(), PROJ_ROOT)
 
-    host, port = settings.HOST, settings.PORT
-    return app, host, port
+    return app, settings.HOST, settings.PORT
 
 
 def main():
-    # init logging
+    """
+    Main HTTP API runner
+    """
+    # Init logging
     logging.basicConfig(level=logging.DEBUG,
-                        format='%(asctime)s - %(levelname)s - %(message)s')
+                        format=settings.LOGGING_FORMAT)
 
+    # Start event loop and web server
     loop = asyncio.get_event_loop()
     app, host, port = loop.run_until_complete(init(loop))
     web.run_app(app, host=host, port=port)
